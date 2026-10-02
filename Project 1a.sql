@@ -142,3 +142,47 @@ INSERT INTO Reviews (customerid, bookid, rating) VALUES
   (12, 'AUDIO', 25);
 
   Select * from Pricing;
+
+
+-- Q1 Book by EDMUND MORNGN since 1990 
+
+SELECT titles 
+FROM Books 
+WHERE author = 'EDMUN MORGAN' AND year >= 1990; 
+
+
+-- Q2 CIVIL WAR books in AUDIO format
+
+SELECT b.title, b.author, p.price 
+FROM Books b 
+JOIN Pricing p ON b.bookid = p.bookid
+WHERE b.title LIKE '%CIVIL WAR%' AND p.format = 'AUDIO';
+
+
+-- Q3 books purchased per year by JOHN CHAMBERS
+
+SELECT pu.year, COUNT(*) AS num_books_purchased
+FROM Purchases pu
+JOIN Customers c ON pu.customerid = c.customerid
+WHERE c.name = 'JOHN CHAMBERS'
+GROUP BY pu.year 
+ORDER BY pu.year; 
+
+
+-- Q4 more than one book purchased in 2003
+
+SELECT c.name, c.email
+FROM Customers c 
+JOIN Purchases pu ON c.customerid = pu.customerid
+WHERE pu.year = 2003 
+GROUP BY c.customerid, c.name, c.email
+HAVING COUNT(*) > 1; 
+
+
+-- Q5 Ave rating for Civil war books 
+
+SELECT b.title, b.author, ROUND(AVG(r.rating), 2) AS avg_rating
+FROM Books b 
+JOIN Reviews r ON b.bookid = r.bookid 
+WHERE b.title LIKE '%CIVIL WAR%'
+GROUP BY b.bookid, b.title, b.author; 
